@@ -1,0 +1,11 @@
+d:war/:0:application/unknown
+a:201060__setuniman__easy-1c85f.wav:6457868:audio/x-wav
+i:Icon.gif:941:image/gif
+i:test.png:4450:image/png
+i:test2.png:2477:image/png
+t:com/badlogic/gdx/graphics/g3d/shaders/default.fragment.glsl:5068:application/unknown
+t:com/badlogic/gdx/graphics/g3d/shaders/default.vertex.glsl:8574:application/unknown
+t:com/badlogic/gdx/graphics/g3d/shaders/depth.fragment.glsl:549:application/unknown
+t:com/badlogic/gdx/graphics/g3d/shaders/depth.vertex.glsl:2687:application/unknown
+t:com/badlogic/gdx/utils/arial-15.fnt:21743:application/unknown
+i:com/badlogic/gdx/utils/arial-15.png:21814:image/png
