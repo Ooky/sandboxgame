@@ -8,6 +8,7 @@ package com.jooky.sandboxgame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -41,15 +42,47 @@ public class Player {
     Texture PlayerTexture;
     //TextureRegions
     TextureRegion PlayerTextureRegion;
+    //Animation
+    Animation walkAnimation;
+    TextureRegion[] walkFrames;
+    float stateTime;
+    TextureRegion currentFrame;
+    private static final int FRAME_COLS = 4;
+    private static final int FRAME_ROWS = 4;
 
 //==============================================================================
 //Methods
 //==============================================================================
     public Player() {
         PlayerTexture = new Texture(Gdx.files.internal("Graphics/Player/Char.png"));
-        PlayerTextureRegion = new TextureRegion();
-        //Up
         PlayerTextureRegion = new TextureRegion(PlayerTexture, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
+        
+        TextureRegion[][] tmp = TextureRegion.split(PlayerTexture, PlayerTexture.getWidth() / FRAME_COLS, PlayerTexture.getHeight() / FRAME_ROWS);
+        walkFrames = new TextureRegion[FRAME_COLS*FRAME_ROWS];
+        int index = 0;
+        for (int i = 0; i < FRAME_ROWS; i++) {
+            for (int j = 0; j < FRAME_COLS; j++) {
+                walkFrames[index++] = tmp[i][j];
+            }
+        }
+        walkAnimation = new Animation(0.525f, walkFrames);
+        stateTime = 0f;
+    }
+
+    public float getStateTime() {
+        return stateTime;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
+    public void setCurrentFrame(TextureRegion currentFrame) {
+        this.currentFrame = currentFrame;
+    }
+
+    public Animation getWalkAnimation() {
+        return walkAnimation;
     }
 
     public void updateMotion() {

@@ -100,11 +100,12 @@ public class Main extends ApplicationAdapter {
         batch.draw(tree3, 500, 350);
         //Character
         batch.draw(myPlayer.PlayerTextureRegion, myPlayer.getPlayerPosX(), myPlayer.getPlayerPosY());
+        
+        myPlayer.setStateTime(myPlayer.getStateTime() + Gdx.graphics.getDeltaTime());
+        myPlayer.setCurrentFrame(myPlayer.getWalkAnimation().getKeyFrame(myPlayer.stateTime, true));
+        batch.draw(myPlayer.currentFrame, 150, 150);
+        
         myPlayer.updateMotion();
-//        camera.setToOrtho(false,  myPlayer.getPlayerPosX(), myPlayer.getPlayerPosY());
-//        camera.position.set(100, 100,123);
-//        camera.translate( 345356, 123);
-//        camera.update();
         batch.end();
         //Grid
         if (Gdx.input.isKeyPressed(Input.Keys.G)) {
