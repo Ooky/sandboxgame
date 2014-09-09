@@ -40,27 +40,21 @@ public class Player {
     //Textures
     Texture PlayerTexture;
     //TextureRegions
-    TextureRegion[] PlayerTextureRegion;
+    TextureRegion PlayerTextureRegion;
 
 //==============================================================================
 //Methods
 //==============================================================================
     public Player() {
         PlayerTexture = new Texture(Gdx.files.internal("Graphics/Player/Char.png"));
-        PlayerTextureRegion = new TextureRegion[4];
+        PlayerTextureRegion = new TextureRegion();
         //Up
-        PlayerTextureRegion[0] = new TextureRegion(PlayerTexture, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
-        //Down
-        PlayerTextureRegion[1] = new TextureRegion(PlayerTexture, 0, 96, PLAYER_WIDTH, PLAYER_HEIGHT);
-        //Left
-        PlayerTextureRegion[2] = new TextureRegion(PlayerTexture, 0, 144, PLAYER_WIDTH, PLAYER_HEIGHT);
-        //Right
-        PlayerTextureRegion[3] = new TextureRegion(PlayerTexture, 0, 48, PLAYER_WIDTH, PLAYER_HEIGHT);
-
+        PlayerTextureRegion = new TextureRegion(PlayerTexture, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
     }
 
     public void updateMotion() {
         if (leftOrA()) {
+            PlayerTextureRegion.setRegion(0, 144, PLAYER_WIDTH, PLAYER_HEIGHT);
             if (shiftLeftOrShiftRight()) {
                 runLeft();
             } else {
@@ -68,6 +62,7 @@ public class Player {
             }
         }
         if (rightOrA()) {
+            PlayerTextureRegion.setRegion(0, 48, PLAYER_WIDTH, PLAYER_HEIGHT);
             if (shiftLeftOrShiftRight()) {
                 runRight();
             } else {
@@ -75,6 +70,7 @@ public class Player {
             }
         }
         if (upOrW()) {
+            PlayerTextureRegion.setRegion(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
             if (shiftLeftOrShiftRight()) {
                 runUp();
             } else {
@@ -82,6 +78,7 @@ public class Player {
             }
         }
         if (downOrS()) {
+            PlayerTextureRegion.setRegion(0, 96, PLAYER_WIDTH, PLAYER_HEIGHT);
             if (shiftLeftOrShiftRight()) {
                 runDown();
             } else {

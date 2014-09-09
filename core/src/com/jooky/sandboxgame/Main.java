@@ -99,7 +99,7 @@ public class Main extends ApplicationAdapter {
         batch.draw(tree3, 450, 350);
         batch.draw(tree3, 500, 350);
         //Character
-        batch.draw(myPlayer.PlayerTextureRegion[0], myPlayer.getPlayerPosX(), myPlayer.getPlayerPosY());
+        batch.draw(myPlayer.PlayerTextureRegion, myPlayer.getPlayerPosX(), myPlayer.getPlayerPosY());
         myPlayer.updateMotion();
 //        camera.setToOrtho(false,  myPlayer.getPlayerPosX(), myPlayer.getPlayerPosY());
 //        camera.position.set(100, 100,123);
