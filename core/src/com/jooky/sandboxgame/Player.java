@@ -8,7 +8,6 @@ package com.jooky.sandboxgame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -32,7 +31,7 @@ public class Player {
     private float PlayerPosX = 250;
     private float PlayerPosY = 250;
     //PlayerMovement
-    private final float playerSpeedNormal = 75.0f;
+    private final float playerSpeedWalking = 75.0f;
     private final float playerSpeedRunning = 150.0f;
     boolean playerLeft;
     boolean playerRight;
@@ -41,61 +40,111 @@ public class Player {
     //Textures
     Texture PlayerTexture;
     //TextureRegions
-    TextureRegion PlayerTextureRegionUp;
-    TextureRegion PlayerTextureRegionDown;
-    TextureRegion PlayerTextureRegionLeft;
-    TextureRegion PlayerTextureRegionRight;
+    TextureRegion[] PlayerTextureRegion;
 
 //==============================================================================
 //Methods
 //==============================================================================
     public Player() {
         PlayerTexture = new Texture(Gdx.files.internal("Graphics/Player/Char.png"));
-        PlayerTextureRegionUp = new TextureRegion(PlayerTexture, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
-        PlayerTextureRegionDown = new TextureRegion(PlayerTexture, 144, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
-        PlayerTextureRegionLeft = new TextureRegion(PlayerTexture, 196, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
-        PlayerTextureRegionRight = new TextureRegion(PlayerTexture, 32, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
+        PlayerTextureRegion = new TextureRegion[4];
+        //Up
+        PlayerTextureRegion[0] = new TextureRegion(PlayerTexture, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
+        //Down
+        PlayerTextureRegion[1] = new TextureRegion(PlayerTexture, 0, 96, PLAYER_WIDTH, PLAYER_HEIGHT);
+        //Left
+        PlayerTextureRegion[2] = new TextureRegion(PlayerTexture, 0, 144, PLAYER_WIDTH, PLAYER_HEIGHT);
+        //Right
+        PlayerTextureRegion[3] = new TextureRegion(PlayerTexture, 0, 48, PLAYER_WIDTH, PLAYER_HEIGHT);
+
     }
 
     public void updateMotion() {
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
-            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                //Running
-                setPlayerPosX(getPlayerPosX() - (playerSpeedRunning * Gdx.graphics.getDeltaTime()));
+        if (leftOrA()) {
+            if (shiftLeftOrShiftRight()) {
+                runLeft();
             } else {
-                setPlayerPosX(getPlayerPosX() - (playerSpeedNormal * Gdx.graphics.getDeltaTime()));
+                walkLeft();
             }
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
-            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                //Running
-                setPlayerPosX(getPlayerPosX() + (playerSpeedRunning * Gdx.graphics.getDeltaTime()));
+        if (rightOrA()) {
+            if (shiftLeftOrShiftRight()) {
+                runRight();
             } else {
-                setPlayerPosX(getPlayerPosX() + (playerSpeedNormal * Gdx.graphics.getDeltaTime()));
+                walkRight();
             }
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                //Running
-                setPlayerPosY(getPlayerPosY() + (playerSpeedRunning * Gdx.graphics.getDeltaTime()));
+        if (upOrW()) {
+            if (shiftLeftOrShiftRight()) {
+                runUp();
             } else {
-                setPlayerPosY(getPlayerPosY() + (playerSpeedNormal * Gdx.graphics.getDeltaTime()));
+                walkUp();
             }
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                //Running
-                setPlayerPosY(getPlayerPosY() - (playerSpeedRunning * Gdx.graphics.getDeltaTime()));
+        if (downOrS()) {
+            if (shiftLeftOrShiftRight()) {
+                runDown();
             } else {
-                setPlayerPosY(getPlayerPosY() - (playerSpeedNormal * Gdx.graphics.getDeltaTime()));
+                walkDown();
             }
         }
-
     }
+
+    private void runLeft() {
+        setPlayerPosX(getPlayerPosX() - (playerSpeedRunning * Gdx.graphics.getDeltaTime()));
+    }
+
+    private void walkLeft() {
+        setPlayerPosX(getPlayerPosX() - (playerSpeedWalking * Gdx.graphics.getDeltaTime()));
+    }
+
+    private void runRight() {
+        setPlayerPosX(getPlayerPosX() + (playerSpeedRunning * Gdx.graphics.getDeltaTime()));
+    }
+
+    private void walkRight() {
+        setPlayerPosX(getPlayerPosX() + (playerSpeedWalking * Gdx.graphics.getDeltaTime()));
+    }
+
+    private void runUp() {
+        setPlayerPosY(getPlayerPosY() + (playerSpeedRunning * Gdx.graphics.getDeltaTime()));
+    }
+
+    private void walkUp() {
+        setPlayerPosY(getPlayerPosY() + (playerSpeedWalking * Gdx.graphics.getDeltaTime()));
+    }
+
+    private void runDown() {
+        setPlayerPosY(getPlayerPosY() - (playerSpeedRunning * Gdx.graphics.getDeltaTime()));
+    }
+
+    private void walkDown() {
+        setPlayerPosY(getPlayerPosY() - (playerSpeedWalking * Gdx.graphics.getDeltaTime()));
+    }
+
+    private boolean leftOrA() {
+        return Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A);
+    }
+
+    private boolean rightOrA() {
+        return Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D);
+    }
+
+    private boolean upOrW() {
+        return Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W);
+    }
+
+    private boolean downOrS() {
+        return Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S);
+    }
+
+    private boolean shiftLeftOrShiftRight() {
+        return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+    }
+
 //==============================================================================
 //Setter
 //==============================================================================
-
     public void setName(String name) {
         this.name = name;
     }
@@ -140,7 +189,6 @@ public class Player {
         this.playerDown = playerDown;
     }
 
-
 //==============================================================================
 //Getter
 //==============================================================================
@@ -181,7 +229,7 @@ public class Player {
     }
 
     public float getPlayerSpeed() {
-        return playerSpeedNormal;
+        return playerSpeedWalking;
     }
 
     public static int getPLAYER_WIDTH() {
@@ -190,14 +238,6 @@ public class Player {
 
     public static int getPLAYER_HEIGHT() {
         return PLAYER_HEIGHT;
-    }
-
-    public Texture getPlayerTexture() {
-        return PlayerTexture;
-    }
-
-    public TextureRegion getPlayerTextureRegion() {
-        return PlayerTextureRegionUp;
     }
 
 }
