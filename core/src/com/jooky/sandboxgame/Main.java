@@ -99,13 +99,10 @@ public class Main extends ApplicationAdapter {
         batch.draw(tree3, 450, 350);
         batch.draw(tree3, 500, 350);
         //Character
-        batch.draw(myPlayer.PlayerTextureRegion, myPlayer.getPlayerPosX(), myPlayer.getPlayerPosY());
-        
-        myPlayer.setStateTime(myPlayer.getStateTime() + Gdx.graphics.getDeltaTime());
-        myPlayer.setCurrentFrame(myPlayer.getWalkAnimation().getKeyFrame(myPlayer.stateTime, true));
-        batch.draw(myPlayer.currentFrame, 150, 150);
-        
         myPlayer.updateMotion();
+//        myPlayer.currentFrame = myPlayer.getWalkAnimation().getKeyFrame(myPlayer.stateTime,true);
+        batch.draw(myPlayer.currentFrame, myPlayer.getPlayerPosX(), myPlayer.getPlayerPosY());
+        System.out.println(myPlayer.getWalkAnimation().getKeyFrameIndex(myPlayer.stateTime));
         batch.end();
         //Grid
         if (Gdx.input.isKeyPressed(Input.Keys.G)) {

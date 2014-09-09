@@ -29,8 +29,8 @@ public class Player {
     public static final int PLAYER_WIDTH = 32;
     public static final int PLAYER_HEIGHT = 48;
     //PlayerPosition
-    private float PlayerPosX = 250;
-    private float PlayerPosY = 250;
+    private float PlayerPosX = 900;
+    private float PlayerPosY = 500;
     //PlayerMovement
     private final float playerSpeedWalking = 75.0f;
     private final float playerSpeedRunning = 150.0f;
@@ -55,68 +55,49 @@ public class Player {
 //==============================================================================
     public Player() {
         PlayerTexture = new Texture(Gdx.files.internal("Graphics/Player/Char.png"));
-        PlayerTextureRegion = new TextureRegion(PlayerTexture, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
-        
+
         TextureRegion[][] tmp = TextureRegion.split(PlayerTexture, PlayerTexture.getWidth() / FRAME_COLS, PlayerTexture.getHeight() / FRAME_ROWS);
-        walkFrames = new TextureRegion[FRAME_COLS*FRAME_ROWS];
+        walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
         int index = 0;
         for (int i = 0; i < FRAME_ROWS; i++) {
             for (int j = 0; j < FRAME_COLS; j++) {
+                System.out.println("index = " + index);
                 walkFrames[index++] = tmp[i][j];
             }
         }
-        walkAnimation = new Animation(0.525f, walkFrames);
+        walkAnimation = new Animation(0.5f, walkFrames);
         stateTime = 0f;
-    }
-
-    public float getStateTime() {
-        return stateTime;
-    }
-
-    public void setStateTime(float stateTime) {
-        this.stateTime = stateTime;
-    }
-
-    public void setCurrentFrame(TextureRegion currentFrame) {
-        this.currentFrame = currentFrame;
-    }
-
-    public Animation getWalkAnimation() {
-        return walkAnimation;
+        currentFrame = walkAnimation.getKeyFrame(stateTime, true);
     }
 
     public void updateMotion() {
         if (leftOrA()) {
-            PlayerTextureRegion.setRegion(0, 144, PLAYER_WIDTH, PLAYER_HEIGHT);
-            if (shiftLeftOrShiftRight()) {
+            if (running()) {
+                walkAnimation.setFrameDuration(0.3f);
                 runLeft();
             } else {
+                walkAnimation.setFrameDuration(0.5f);
                 walkLeft();
             }
-        }
-        if (rightOrA()) {
-            PlayerTextureRegion.setRegion(0, 48, PLAYER_WIDTH, PLAYER_HEIGHT);
-            if (shiftLeftOrShiftRight()) {
+            stateTime += Gdx.graphics.getDeltaTime();
+            currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+        } else if (rightOrA()) {
+            walkRight();
+            if (running()) {
                 runRight();
-            } else {
-                walkRight();
             }
-        }
-        if (upOrW()) {
-            PlayerTextureRegion.setRegion(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT);
-            if (shiftLeftOrShiftRight()) {
+        } else if (upOrW()) {
+            walkUp();
+            if (running()) {
                 runUp();
-            } else {
-                walkUp();
             }
-        }
-        if (downOrS()) {
-            PlayerTextureRegion.setRegion(0, 96, PLAYER_WIDTH, PLAYER_HEIGHT);
-            if (shiftLeftOrShiftRight()) {
+        } else if (downOrS()) {
+            walkDown();
+            if (running()) {
                 runDown();
-            } else {
-                walkDown();
             }
+        } else {
+//            System.out.println("not moving");
         }
     }
 
@@ -168,7 +149,7 @@ public class Player {
         return Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S);
     }
 
-    private boolean shiftLeftOrShiftRight() {
+    private boolean running() {
         return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
     }
 
@@ -217,6 +198,10 @@ public class Player {
 
     public void setPlayerDown(boolean playerDown) {
         this.playerDown = playerDown;
+    }
+
+    public void setCurrentFrame(TextureRegion currentFrame) {
+        this.currentFrame = currentFrame;
     }
 
 //==============================================================================
@@ -268,6 +253,18 @@ public class Player {
 
     public static int getPLAYER_HEIGHT() {
         return PLAYER_HEIGHT;
+    }
+
+    public float getStateTime() {
+        return stateTime;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
+    public Animation getWalkAnimation() {
+        return walkAnimation;
     }
 
 }

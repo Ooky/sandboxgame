@@ -15,9 +15,10 @@ public class DesktopLauncher {
         config.addIcon("Graphics/Icon/Icon.gif", Files.FileType.Internal);
         config.title = Main.GAMENAME;
         config.resizable = true;
-        //Window Position
-//        config.x = 0;
-//        config.y = 0;
+        //Shows the "real" fps, 0 disables throttling 
+//        config.vSyncEnabled = false;
+//        config.foregroundFPS = 0;
+//        config.backgroundFPS = 0;
         new LwjglApplication(new Main(), config);
     }
 }
